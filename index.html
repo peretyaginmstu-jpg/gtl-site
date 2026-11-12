@@ -78,7 +78,12 @@ main:focus{outline:0}
 .art svg,.art img{display:block;width:100%;height:100%;overflow:visible}
 .art img{object-fit:contain}
 .ga *{vector-effect:non-scaling-stroke}
-.plate,.card figure{-webkit-user-select:none;user-select:none}
+.plate,.card figure{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:pan-y}
+.tc{position:absolute;left:0;top:0;z-index:3;width:36px;height:36px;margin:-18px 0 0 -18px;border:1.5px solid var(--acc);border-radius:50%;pointer-events:none;opacity:0;transition:opacity .35s}
+.tc::after{content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:var(--acc)}
+.touching>.tc{opacity:1}
+.card:has(.touching){background:var(--soft)}
+.card:has(.touching)::before,.card:has(.touching)::after{opacity:1;transform:none}
 .ro{position:absolute;font-family:var(--mono);font-size:10.5px;line-height:1.5;letter-spacing:.02em;color:var(--ink);pointer-events:none;opacity:0;transition:opacity .35s}
 .live>.ro{opacity:1}
 
@@ -362,7 +367,7 @@ footer{margin-top:clamp(90px,12vw,170px);padding:0 0 36px}
   *,*::before,*::after{transition-duration:.01ms!important}
 }
 @media print{
-  .nav,.progress,.totop,.skip,.chips,.form-foot,.hint,.msg,.ask,.seal,.f-top .rv:last-child,.clock,.ro,.tip{display:none!important}
+  .nav,.progress,.totop,.skip,.chips,.form-foot,.hint,.msg,.ask,.seal,.f-top .rv:last-child,.clock,.ro,.tip,.tc{display:none!important}
   .js .rv,.js .rule{opacity:1!important;transform:none!important}
   body{font-size:11pt}
   section,.statement{padding-top:36px}
@@ -684,7 +689,7 @@ const CONFIG = {
   const plain = s => s.replace(/ /g, ' ').trim();
 
   $('#year').textContent = new Date().getFullYear();
-  if (matchMedia('(hover: none)').matches) $('#tip').textContent = 'Рисунки живые — коснитесь любого';
+  if (matchMedia('(hover: none)').matches) $('#tip').textContent = 'Рисунки живые — ведите по ним пальцем';
 
   /* контакты из настроек */
   if (CONFIG.phone) $$('[data-phone]').forEach(a => { a.hidden = false; a.textContent = CONFIG.phone; a.href = 'tel:' + CONFIG.phone.replace(/[^\d+]/g, ''); });

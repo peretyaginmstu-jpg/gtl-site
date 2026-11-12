@@ -31,6 +31,7 @@ const FONT = "'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace";
 const TONES = [T1, T3, T2], CT = [T1, T2], BRZ = [A1, ACC, A2], NO = Object.freeze({});
 const NB = ' ', TAU = Math.PI * 2;
 const HOVER = typeof matchMedia === 'undefined' || !matchMedia('(hover: none)').matches;   // есть ли у устройства курсор
+const TAP = HOVER ? 'щелчок' : 'касание';
 
 const f = n => Math.round(n * 10) / 10;
 const f2 = n => Math.round(n * 100) / 100;
@@ -323,7 +324,7 @@ SCENES.delivery = {
     const N = Math.cos(st.th) + st.L * st.om * st.om / 9.81 - st.at / 9.81 * Math.sin(st.th);     // натяжение каната в долях веса
     const out = [`L ${num(st.L, 1)} м`, `T = 2π√(L/g) = ${num(T, 1)} с`, `θ ${sgn(st.th * 180 / Math.PI, 1)}°`];
     if (st.land) out.push(`груз на месте, промах ${num(miss)} см${miss <= 5 ? ' ✓' : ''}`);
-    else { out.push(`на ветвь стропа ${num(N * .3345, 2)} G`); if (live && HOVER) out.push('зажмите кнопку — посадка'); }
+    else { out.push(`на ветвь стропа ${num(N * .3345, 2)} G`); if (live) out.push(HOVER ? 'зажмите кнопку — посадка' : 'задержите палец — посадка'); }
     return out;
   }
 };
@@ -399,7 +400,7 @@ SCENES.install = {
   read(st, live) {
     const sec = v => Math.round(Math.abs(v) * 206.265), ok = Math.abs(st.tx) <= .02 && Math.abs(st.ty) <= .02;
     const out = [`X ${sgn(st.tx, 2)} мм/м (${sec(st.tx)}″)`, `Y ${sgn(st.ty, 2)} мм/м (${sec(st.ty)}″)`, ok ? '✓ в пределах деления 0,02 мм/м' : 'цена деления 0,02 мм/м'];
-    if (live && HOVER) out.push('щелчок — толчок');
+    if (live) out.push(TAP + ' — толчок');
     return out;
   }
 };
@@ -464,9 +465,9 @@ SCENES.service = {
   read(st, live) {
     const n = round(Math.abs(st.n), 100), out = [];
     if (st.hot) out.push(`${st.hot} — ${PARTS[st.hot][2]}`);
-    if (live && n < 200) out.push(HOVER ? 'проведите курсором поперёк оси — шпиндель раскрутится' : 'шпиндель раскручивается');
+    if (live && n < 200) out.push(HOVER ? 'проведите курсором поперёк оси — шпиндель раскрутится' : 'проведите пальцем поперёк оси — шпиндель раскрутится');
     else out.push(`n ${grp(n)} об/мин`, `сепаратор ${grp(round(.42 * n, 10))} об/мин`, n ? `ресурс L10 ${grp(round(4096e6 / (60 * n), 100))} ч` : 'ресурс L10 —');
-    if (live && HOVER) out.push(st.et ? 'щелчок — собрать узел' : 'щелчок — разнести');
+    if (live) out.push(TAP + (st.et ? ' — собрать узел' : ' — разнести'));
     return out;
   }
 };
@@ -540,7 +541,7 @@ SCENES.layout = {
     const tm = st.takt * 5, h = st.halt, q = st.tok.filter(t => t.k === (h < 0 ? 2 : h) && t.q).length;
     const out = [`такт запуска ${num(tm)} мин`, `выпуск ${num(h < 0 ? 60 / Math.max(tm, 16) : 0, 1)} шт/ч`,
       h >= 0 ? `станок ${h + 1} остановлен — поток заперт` : tm < 15.95 ? 'узкое место — операция 3 (16 мин)' : 'поток без очереди', `очередь ${q} шт`];
-    if (live && HOVER && h < 0) out.push('щелчок — срочная партия');
+    if (live && h < 0) out.push(TAP + ' — срочная партия');
     return out;
   }
 };
@@ -614,7 +615,7 @@ SCENES.software = {
   read(st, live) {
     const out = [`OEE = A × P × Q = ${num(st.A, 2)} × ${num(st.P, 2)} × ${num(st.Q, 2)} = ${num(st.A * st.P * st.Q * 100)} %`, `в работе ${4 - st.stop.filter(v => v > .5).length} из 4`];
     if (st.scrub >= 0) out.push(`на графике ${num(st.hist[st.scrub] * 100)} %`);
-    else if (live && HOVER) out.push('щелчок — опрос станков');
+    else if (live) out.push(TAP + ' — опрос станков');
     return out;
   }
 };
@@ -784,7 +785,12 @@ SCENES.machine = {
     else if (c === 'start') { if (!st.run) { if (st.any) st.fresh = true; st.run = PROGS[st.prog].cmds; st.pc = 0; st.fin = 0; } }
     else if (c === 'stop') { if (st.run) { st.run = null; st.fin = 0; } else if (st.any) st.fresh = true; }
   },
-  tap(st) { this.cmd(st, st.run ? 'stop' : 'start'); },
+  tap(st, ptr) {                                                          // касание: по кнопке — её действие, мимо — пуск или стоп
+    let b = 0, best = 44;
+    for (let i = 0; i < 2; i++) { const d = Math.hypot(ptr.x - BTN_S[i][0], ptr.y - BTN_S[i][1]); if (d < best) { best = d; b = i + 1; } }
+    if (b) { st.push = b; st.pt = .22; }
+    this.cmd(st, b === 1 ? 'start' : b === 2 || st.run ? 'stop' : 'start');
+  },
 
   step(st, dt, ptr) {
     /* курсор над кнопкой, щелчок по ней; рядом со стойкой стол за курсором не идёт */
@@ -1002,7 +1008,7 @@ SCENES.machine = {
     if (!st.run && st.fin <= 0 && !st.man) {
       if (st.hov === 1) return [`«Пуск» — программа «${name}»`, 'щёлкните по кнопке'];
       if (st.hov === 2) return [st.any ? '«Стоп» — убрать заготовку' : '«Стоп» — прервать программу', st.any ? 'щёлкните по кнопке' : 'сейчас станок стоит'];
-      return HOVER ? ['наведите курсор — стол пойдёт за ним', 'бронзовая кнопка на стойке — пуск программы'] : ['коснитесь рисунка', 'станок выполнит программу'];
+      return HOVER ? ['наведите курсор — стол пойдёт за ним', 'бронзовая кнопка на стойке — пуск программы'] : ['ведите пальцем — стол пойдёт за ним', 'касание — пуск программы'];
     }
     const T = TOOLS[st.tool], c = v => sgn(v, 1).padStart(6, NB), n = round(st.n, 10);
     const mode = st.run ? `программа «${name}» · ${Math.round(100 * st.pc / (st.run.length - 1))} %` : st.fin > 0 ? `программа «${st.done}» выполнена` : 'ручной режим' + (st.hint && HOVER ? ' · щелчок — смена фрезы' : '');
@@ -1016,7 +1022,7 @@ SCENES.machine = {
 };
 
 /* ───────── запуск на странице ───────── */
-const NS = 'http://www.w3.org/2000/svg', DEMO = 7;
+const NS = 'http://www.w3.org/2000/svg';
 
 function first(id) {
   const def = SCENES[id], st = def.init(), s = new Scene(id);
@@ -1051,7 +1057,7 @@ function mount(host) {
 
   /* курсор в координатах рисунка: положение, скорость, нажатие; zu, zv — доли ширины и высоты области */
   const ptr = { x: 0, y: 0, lx: 0, ly: 0, vx: 0, vy: 0, zu: .5, zv: .5, in: false, was: false, down: false, hit: false };
-  let raf = 0, last = 0, demo = 0, tSay = 0, shown = null, cur = '';
+  let raf = 0, last = 0, demo = 0, demoT = 0, hold = 0, finger = false, tSay = 0, shown = null, cur = '';
   const lit = () => zone.classList.toggle('live', ptr.in || !!(def.active && def.active(st)));
   const say = () => {
     const a = def.read(st, ptr.in), t = a.join('\n');
@@ -1061,13 +1067,16 @@ function mount(host) {
   };
   const paint = () => { const q = new Scene(id, sd); def.draw(q, st); svg.innerHTML = q.html(); };
   const advance = dt => {
-    if (demo > 0) {                                                       // показ без курсора: точка сама ходит по рисунку
-      const t0 = DEMO - demo;
-      demo -= dt;
-      const t1 = DEMO - demo, q = def.demo ? def.demo(t1) : [vb.x + vb.w * (.5 + .3 * Math.sin(t1 * 1.1)), vb.y + vb.h * (.5 + .26 * Math.sin(t1 * 1.7 + 1))];
+    if (demo > 0) {                                                       // показ без курсора и пальца: точка сама ходит по рисунку
+      const t0 = demoT;
+      demo -= dt; demoT += dt;
+      const q = def.demo ? def.demo(demoT) : [vb.x + vb.w * (.5 + .3 * Math.sin(demoT * 1.1)), vb.y + vb.h * (.5 + .26 * Math.sin(demoT * 1.7 + 1))];
       ptr.x = q[0]; ptr.y = q[1]; ptr.zu = (q[0] - vb.x) / vb.w; ptr.zv = (q[1] - vb.y) / vb.h; ptr.in = demo > 0;
-      if (def.taps) for (const tt of def.taps) if (t0 < tt && t1 >= tt) ptr.hit = true;
+      if (def.taps) for (const tt of def.taps) if (t0 < tt && demoT >= tt) ptr.hit = true;
+      spot();
+      if (demo <= 0) zone.classList.remove('touching');
     }
+    if (hold > 0 && !finger) { hold -= dt; if (hold <= 0) { ptr.in = false; zone.classList.remove('touching'); } }   // после касания сцена ещё немного живёт
     if (ptr.in && ptr.was) { ptr.vx = ease(ptr.vx, (ptr.x - ptr.lx) / dt, dt, 30); ptr.vy = ease(ptr.vy, (ptr.y - ptr.ly) / dt, dt, 30); } else ptr.vx = ptr.vy = 0;
     ptr.lx = ptr.x; ptr.ly = ptr.y; ptr.was = ptr.in;
     const busy = def.step(st, dt, ptr, vb);
@@ -1090,6 +1099,17 @@ function mount(host) {
     const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse());
     ptr.x = p.x; ptr.y = p.y; ptr.zu = (e.clientX - r.left) / r.width; ptr.zv = (e.clientY - r.top) / r.height;
   };
+
+  /* кольцо-метка рабочей точки: на сенсорном экране показывает, куда «смотрит» палец */
+  const ring = document.createElement('i');
+  ring.className = 'tc'; ring.setAttribute('aria-hidden', 'true');
+  zone.append(ring);
+  const spot = () => {
+    const m = svg.getScreenCTM(), r = zone.getBoundingClientRect();
+    if (!m) return;
+    const q = new DOMPoint(ptr.x, ptr.y).matrixTransform(m);
+    ring.style.transform = `translate(${f(q.x - r.left)}px,${f(q.y - r.top)}px)`;
+  };
   say();
 
   /* для отладки и проверки: host.gtl.run(секунды) прокручивает модель без ожидания кадров */
@@ -1102,7 +1122,67 @@ function mount(host) {
   zone.addEventListener('pointerleave', mouse(() => { ptr.in = ptr.down = false; wake(); }));
   zone.addEventListener('pointerdown', mouse(e => { if (e.button === 0) { demo = 0; ptr.in = ptr.down = ptr.hit = true; move(e); wake(); } }));
   addEventListener('pointerup', () => { ptr.down = false; });
-  zone.addEventListener('click', () => { if (!HOVER) { if (def.tap) def.tap(st); else demo = DEMO; wake(); } });   // на сенсорных экранах — показ или запуск по касанию
+
+  /* ── касания: палец ведёт сцену так же, как курсор.
+     Движение вбок или после короткой паузы — управление рисунком; быстрый вертикальный жест — обычная прокрутка страницы.
+     Короткое касание работает как щелчок, долгое — как зажатая кнопка. После отрыва пальца сцена ещё пару секунд живёт,
+     а в первую секунду новое касание подхватывает её сразу, в любом направлении.
+     Рабочая точка вынесена выше пальца и отмечена кольцом, чтобы рука её не закрывала. */
+  const LIFT = 34;
+  let real = false;                                                       // было ли настоящее касание: до него браузер вибрацию не разрешает
+  const buzz = ms => { try { if (real && navigator.vibrate) navigator.vibrate(ms); } catch (e) { /* устройство без отклика */ } };
+  let tid = null, tStart = 0, sx = 0, sy = 0, mode = 0, far = false, armed = 0, press = 0;      // mode: 0 — ждём, 1 — управление, 2 — прокрутка
+  const touchOf = e => { for (let i = 0; i < e.changedTouches.length; i++) if (e.changedTouches[i].identifier === tid) return e.changedTouches[i]; return null; };
+  const point = (t, lift) => { move({ clientX: t.clientX, clientY: t.clientY - lift }); spot(); };
+  const grab = t => { mode = 1; finger = true; demo = 0; hold = 0; ptr.in = true; point(t, LIFT); zone.classList.add('touching'); wake(); };
+  zone.addEventListener('touchstart', e => {
+    if (tid !== null) return;
+    const t = e.changedTouches[0];
+    tid = t.identifier; tStart = performance.now(); sx = t.clientX; sy = t.clientY; mode = 0; far = false;
+    if (tStart < armed) grab(t);
+    clearTimeout(press);
+    press = setTimeout(() => { if (tid !== null && mode !== 2 && !far) { if (mode === 0) grab(t); ptr.down = true; buzz(10); wake(); } }, 420);
+  }, { passive: true });
+  zone.addEventListener('touchmove', e => {
+    const t = touchOf(e);
+    if (!t) return;
+    const dx = t.clientX - sx, dy = t.clientY - sy;
+    if (Math.hypot(dx, dy) > 10) far = true;
+    if (mode === 0) {
+      if (!far) return;
+      if (e.cancelable && (Math.abs(dx) > Math.abs(dy) || performance.now() - tStart > 170)) grab(t);
+      else { mode = 2; clearTimeout(press); return; }
+    }
+    if (mode !== 1) return;
+    if (e.cancelable) e.preventDefault();
+    point(t, LIFT); wake();
+  }, { passive: false });
+  const release = e => {
+    const t = touchOf(e);
+    if (!t) return;
+    clearTimeout(press);
+    if (e.isTrusted) real = true;
+    if (e.type === 'touchend' && !far && mode !== 2 && performance.now() - tStart < 350) {      // короткое касание — щелчок в точке под пальцем
+      demo = 0; point(t, 0);
+      if (def.tap) { def.tap(st, ptr); ptr.in = false; } else ptr.in = ptr.hit = true;
+      zone.classList.add('touching'); buzz(8); mode = 1;
+    }
+    if (mode === 1) { armed = performance.now() + 1200; hold = 2.4; }
+    tid = null; far = false; finger = false; ptr.down = false; mode = 0;
+    wake();
+  };
+  zone.addEventListener('touchend', release);
+  zone.addEventListener('touchcancel', release);
+
+  /* на сенсорном экране рисунок один раз коротко оживает сам, когда попадает в поле зрения, — видно, что он живой */
+  if (!HOVER && 'IntersectionObserver' in window) {
+    const seen = new IntersectionObserver(es => {
+      if (!es.some(x => x.isIntersecting)) return;
+      seen.disconnect();
+      if (tid === null && !ptr.in && !(def.active && def.active(st))) { demo = 2.6; demoT = 0; zone.classList.add('touching'); wake(); }
+    }, { threshold: .7 });
+    seen.observe(zone);
+  }
 }
 
 const api = { scenes: SCENES, Scene, still, mount };

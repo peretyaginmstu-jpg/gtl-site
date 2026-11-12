@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ГТЛ Система — поставка промышленных станков, монтаж, сервис и инжиниринг</title>
+<meta name="description" content="ООО «ГТЛ Система» (Москва): поставка промышленных станков, монтаж и пусконаладка, ремонт и сервис, инженерное проектирование, разработка ПО и консалтинг для производственных предприятий.">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light">
+<meta name="format-detection" content="telephone=no">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ГТЛ Система">
+<meta property="og:title" content="ГТЛ Система — станки для производства, от подбора до запуска">
+<meta property="og:description" content="Поставка станков, монтаж, сервис, проектирование и программное обеспечение для производств. Москва.">
+<meta property="og:locale" content="ru_RU">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2316171a'/%3E%3Cpath d='M18 18h28v8H26v12h12v-5h8v13H18z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js');</script>
+<script src="assets/art.js" defer></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "ГТЛ Система",
+  "legalName": "ООО «ГТЛ Система»",
+  "alternateName": "GTL Systems LLC",
+  "foundingDate": "2025-10-07",
+  "taxID": "9725194159",
+  "address": {
+    "@type": "PostalAddress",
+    "postalCode": "115114",
+    "addressCountry": "RU",
+    "addressLocality": "Москва",
+    "streetAddress": "Дербеневская набережная, д. 13/17, к. 2, помещ. 1/1"
+  }
+}
+</script>
+<style>
+/* ───────── основа ───────── */
+@property --mx{syntax:"<percentage>";inherits:true;initial-value:50%}
+@property --my{syntax:"<percentage>";inherits:true;initial-value:46%}
+:root{
+  --bg:#ffffff; --ink:#16171a; --mut:#676b72; --faint:#8c9097;
+  --line:#e8e6e1; --line2:#cdcac3; --acc:#a0622d; --soft:#f8f7f4; --err:#b3261e;
+  --display:"Inter Tight","Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --wrap:1280px; --pad:clamp(20px,4vw,56px); --gap:clamp(80px,11vw,150px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{color-scheme:light;scroll-behavior:smooth;-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:var(--line2) transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--body);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;-webkit-tap-highlight-color:transparent}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;border-radius:0;padding:0;touch-action:manipulation}
+h1,h2,h3,p,figure,ol,ul{margin:0}
+h1,h2,h3{text-wrap:balance}
+p{text-wrap:pretty}
+img{display:block;max-width:100%}
+::selection{background:var(--ink);color:#fff}
+:focus-visible{outline:2px solid var(--acc);outline-offset:4px}
+main:focus{outline:0}
+[id]{scroll-margin-top:92px}
+[hidden]{display:none!important}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--pad)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.skip{position:absolute;left:var(--pad);top:-64px;z-index:70;background:var(--ink);color:#fff;padding:13px 18px;font-size:14px;transition:top .25s var(--ease)}
+.skip:focus{top:10px}
+.mono{font-family:var(--mono);font-size:11.5px;line-height:1.5;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.eyebrow{display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:7px;height:7px;background:var(--acc);transform:rotate(45deg);flex:none}
+.eyebrow b{font-weight:400;color:var(--ink)}
+.ar{display:inline-block;transition:transform .4s var(--ease)}
+
+/* живые иллюстрации (assets/art.js) и строка показаний под курсором */
+.art svg,.art img{display:block;width:100%;height:100%;overflow:visible}
+.art img{object-fit:contain}
+.ga *{vector-effect:non-scaling-stroke}
+.plate,.card figure{-webkit-user-select:none;user-select:none}
+.ro{position:absolute;font-family:var(--mono);font-size:10.5px;line-height:1.5;letter-spacing:.02em;color:var(--ink);pointer-events:none;opacity:0;transition:opacity .35s}
+.live>.ro{opacity:1}
+
+/* появление блоков и линий */
+.js .rv{opacity:0;transform:translateY(12px);transition:opacity .8s ease var(--d,0s),transform .8s var(--ease) var(--d,0s)}
+.js .rv.in{opacity:1;transform:none}
+.rule{height:1px;background:var(--ink);transform-origin:left center}
+.js .rule{transform:scaleX(0);transition:transform 1.2s var(--ease)}
+.js .rule.in{transform:none}
+
+/* ───────── кнопки и ссылки ───────── */
+.btn{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:14px;padding:18px 28px;font-weight:500;font-size:15px;line-height:1;letter-spacing:.01em;white-space:nowrap;background:#fff;border:1px solid var(--ink);transition:color .45s var(--ease),border-color .3s}
+.btn::before{content:"";position:absolute;inset:-1px;z-index:-1;background:var(--ink);transform-origin:left center;transition:transform .5s var(--ease)}
+.btn-dark{color:#fff}
+.btn-dark:hover{color:var(--ink)}
+.btn-dark:hover::before{transform:scaleX(0);transform-origin:right center}
+.btn-line{border-color:var(--line2)}
+.btn-line::before{transform:scaleX(0)}
+.btn-line:hover{color:#fff;border-color:var(--ink)}
+.btn-line:hover::before{transform:none}
+.btn:hover .ar{transform:translateX(5px)}
+.btn:active{transform:translateY(1px)}
+.btn-sm{padding:13px 20px;font-size:14px;gap:10px}
+.link{position:relative;display:inline-flex;align-items:center;gap:10px;font-weight:500;font-size:15px;padding:8px 0}
+.link::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(var(--ink),var(--ink)) left/0 100% no-repeat var(--line2);transition:background-size .5s var(--ease)}
+.link:hover::after,.link:focus-visible::after{background-size:100% 100%}
+.link:hover .ar{transform:translateX(5px)}
+.link:hover .ar.up{transform:translate(3px,-3px)}
+
+/* ───────── шапка ───────── */
+.progress{position:fixed;inset:0 0 auto 0;height:2px;background:var(--acc);transform-origin:left center;transform:scaleX(var(--p,0));z-index:60;pointer-events:none}
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.88);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);border-bottom:1px solid transparent;transition:border-color .3s,margin-bottom .35s var(--ease)}
+.nav.stuck{border-color:var(--line);margin-bottom:12px}   /* шапка сжимается на 12px — отступ компенсирует, чтобы страница не дёргалась */
+.nav .wrap{display:flex;align-items:center;gap:36px;height:78px;transition:height .35s var(--ease)}
+.nav.stuck .wrap{height:66px}
+.logo{display:flex;align-items:center;gap:14px;font-family:var(--display);font-weight:600;font-size:16.5px;letter-spacing:.07em;white-space:nowrap}
+.logo svg{width:30px;height:30px;flex:none;transition:transform .6s var(--ease)}
+.logo:hover svg{transform:rotate(90deg)}
+.nav nav{display:flex;gap:34px;margin-left:auto}
+.nav nav a{position:relative;font-size:15px;color:var(--mut);padding:6px 0;transition:color .25s}
+.nav nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--ink);transform:scaleX(0);transform-origin:right center;transition:transform .45s var(--ease)}
+.nav nav a:hover,.nav nav a.on{color:var(--ink)}
+.nav nav a:hover::after,.nav nav a.on::after{transform:none;transform-origin:left center}
+.nav-phone{font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
+.burger{display:none;width:44px;height:44px;position:relative;margin-right:-10px}
+.burger i{position:absolute;left:11px;right:11px;height:1.5px;background:var(--ink);transition:transform .3s var(--ease),top .3s var(--ease)}
+.burger i:first-child{top:17px}.burger i:last-child{top:26px}
+.menu-open .burger i:first-child{top:21px;transform:rotate(45deg)}
+.menu-open .burger i:last-child{top:21px;transform:rotate(-45deg)}
+
+/* ───────── первый экран ───────── */
+.hero{padding:clamp(36px,6vw,84px) 0 0}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.04fr);gap:clamp(24px,4vw,72px);align-items:center}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(2.5rem,5.3vw,4.9rem);line-height:1.01;letter-spacing:-.034em;margin-top:30px}
+h1 span{color:var(--faint)}
+.lead{font-size:clamp(1.05rem,1.3vw,1.2rem);line-height:1.58;color:var(--mut);max-width:31em;margin-top:30px}
+.lead b{font-weight:500;color:var(--ink)}
+.cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 32px;margin-top:42px}
+.reg{display:flex;flex-wrap:wrap;gap:6px 24px;margin-top:44px;padding-top:18px;border-top:1px solid var(--line);max-width:31em}
+.reg b{font-weight:400;color:var(--ink)}
+
+.plate{position:relative;padding:clamp(20px,3vw,40px) clamp(14px,2.4vw,34px) 0;transition:--mx .7s var(--ease),--my .7s var(--ease)}
+.plate::before{content:"";position:absolute;inset:0 0 44px 0;background-image:radial-gradient(circle,#d3d0c8 1px,transparent 1.2px);background-size:22px 22px;background-position:center;-webkit-mask-image:radial-gradient(ellipse 72% 64% at var(--mx) var(--my),#000 0%,transparent 78%);mask-image:radial-gradient(ellipse 72% 64% at var(--mx) var(--my),#000 0%,transparent 78%);opacity:.7}
+.plate .art{position:relative;aspect-ratio:771/639}
+.plate .ro{top:11px;right:12px;padding:4px 7px;background:rgba(255,255,255,.88);text-align:right;white-space:pre;opacity:1;color:var(--faint);transition:color .35s}
+.plate.live .ro{color:var(--ink)}
+.plate .ro span{display:block}
+.plate .c{position:absolute;width:13px;height:13px;border:solid var(--ink);border-width:0}
+.plate .tl{top:0;left:0;border-top-width:1px;border-left-width:1px}
+.plate .tr{top:0;right:0;border-top-width:1px;border-right-width:1px}
+.plate .bl{bottom:44px;left:0;border-bottom-width:1px;border-left-width:1px}
+.plate .br{bottom:44px;right:0;border-bottom-width:1px;border-right-width:1px}
+.plate figcaption{position:relative;display:flex;justify-content:space-between;gap:16px;height:44px;align-items:flex-end}
+.plate figcaption b{font-weight:400;color:var(--acc)}
+.legend{list-style:none;padding:18px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 24px;margin-top:20px;border-top:1px solid var(--line);counter-reset:l}
+.legend li{counter-increment:l;display:flex;align-items:center;gap:12px;font-size:14.5px;line-height:1.3;color:var(--mut)}
+.legend li::before{content:counter(l);flex:none;width:22px;height:22px;border:1px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:11px;color:var(--ink)}
+
+.pillars{margin-top:clamp(48px,7vw,96px)}
+.pillars .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.pillars .row>div{padding:28px 32px 4px 0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 18px;align-content:start}
+.pillars .row>div+div{padding-left:32px;border-left:1px solid var(--line)}
+.pillars svg{grid-row:span 2;width:26px;height:26px;color:var(--acc);margin-top:1px;transition:transform .7s var(--ease)}
+.pt{font-family:var(--display);font-weight:500;font-size:1.2rem;line-height:1.3;letter-spacing:-.01em;margin-top:0}
+.pillars p{color:var(--mut);font-size:15.5px;max-width:25em}
+
+/* ───────── подход ───────── */
+.statement{padding-top:var(--gap)}
+.statement .wrap>div{display:grid;grid-template-columns:minmax(0,.28fr) minmax(0,1fr);gap:32px}
+.statement .eyebrow{align-self:start;margin-top:.95em}
+.statement p{font-family:var(--display);font-weight:500;font-size:clamp(1.5rem,3vw,2.7rem);line-height:1.16;letter-spacing:-.026em;max-width:22em}
+.statement p span{color:var(--faint)}
+
+/* ───────── секции ───────── */
+section{padding:var(--gap) 0 0}
+.head{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:32px;align-items:end;margin:26px 0 clamp(36px,5vw,60px)}
+h2{font-family:var(--display);font-weight:500;font-size:clamp(1.9rem,3.7vw,3.3rem);line-height:1.05;letter-spacing:-.032em;margin-top:22px}
+.head>p,.head>.aside{color:var(--mut);max-width:30em;justify-self:end}
+.tip{display:none;align-items:center;gap:10px;margin-top:18px;color:var(--ink)}
+.js .tip{display:flex}
+.tip::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--acc);flex:none}
+
+/* направления */
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.card{position:relative;background:#fff;padding:0 0 30px;display:flex;flex-direction:column;transition:background .5s}
+.js .card.rv{transition:opacity .8s ease var(--d,0s),transform .8s var(--ease) var(--d,0s),background .5s}
+.card .figno{position:absolute;top:18px;left:22px;font-size:10.5px}
+.card .figno b{font-weight:400;color:var(--acc)}
+.card::before,.card::after{content:"";position:absolute;width:11px;height:11px;border:solid var(--ink);border-width:0;opacity:0;transition:opacity .35s,transform .5s var(--ease)}
+.card::before{top:14px;right:14px;border-top-width:1px;border-right-width:1px;transform:translate(-5px,5px)}
+.card::after{bottom:14px;left:14px;border-bottom-width:1px;border-left-width:1px;transform:translate(5px,-5px)}
+.card figure{position:relative;aspect-ratio:5/4}
+.card .art{position:absolute;left:12%;top:11%;width:76%;height:73%}
+.card .ro{left:34px;right:34px;bottom:5px;display:flex;flex-wrap:wrap;gap:0 15px}
+.ro span{white-space:nowrap}
+.card .body{padding:0 34px;display:flex;flex-direction:column;flex:1}
+.card h3{font-family:var(--display);font-weight:500;font-size:1.4rem;line-height:1.2;letter-spacing:-.015em}
+.card p{color:var(--mut);font-size:15.5px;margin:12px 0 22px}
+.ask{align-self:flex-start;margin-top:auto;font-size:14px}
+
+/* процесс */
+.steps-rule{position:relative}
+.steps-rule::after{content:"";position:absolute;left:0;top:-1px;width:100%;height:3px;background:var(--acc);transform:scaleX(var(--p,0));transform-origin:left center;transition:transform .7s var(--ease)}
+.steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));counter-reset:s}
+.step{position:relative;padding:28px 24px 0 0;counter-increment:s}
+.step+.step{padding-left:24px;border-left:1px solid var(--line)}
+.step::before{content:"0" counter(s);font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;color:var(--acc)}
+.step::after{content:"";position:absolute;top:-5px;left:-5px;width:9px;height:9px;background:#fff;border:1px solid var(--ink);transform:rotate(45deg);transition:background .3s,border-color .3s}
+.step:first-child::after{left:0}
+.step h3{font-family:var(--display);font-weight:500;font-size:1.2rem;line-height:1.25;letter-spacing:-.01em;margin-top:52px}
+.step p{color:var(--mut);font-size:15px;margin-top:10px}
+
+/* надёжность */
+.trust{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,6vw,96px);align-items:start;margin-top:26px}
+.trust .intro{position:sticky;top:104px}
+.trust .intro p{color:var(--mut);margin-top:24px;max-width:28em}
+.trust .intro .link{margin-top:24px}
+.seal{display:block;width:124px;height:124px;margin-top:46px;color:var(--ink)}
+.seal text{font-family:var(--mono);font-size:8.6px;letter-spacing:.2em;fill:var(--mut);transform-box:view-box;transform-origin:62px 62px;transform:rotate(var(--r,0deg));transition:transform 1s var(--ease)}
+.checks{list-style:none;padding:0}
+.checks li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:4px 18px;align-items:baseline;padding:22px 0;border-bottom:1px solid var(--line);transition:padding .45s var(--ease)}
+.js .checks li.rv{transition:opacity .8s ease var(--d,0s),transform .8s var(--ease) var(--d,0s),padding .45s var(--ease)}
+.checks svg{width:16px;height:16px;color:var(--acc);align-self:center;grid-row:1}
+.checks b{font-family:var(--display);font-weight:500;font-size:1.15rem;line-height:1.3;letter-spacing:-.01em}
+.checks small{grid-column:2;color:var(--mut);font-size:15px}
+.checks .src{grid-row:1;grid-column:3;font-size:10.5px;white-space:nowrap}
+.note{font-size:13.5px;color:var(--mut);margin-top:18px}
+
+/* контакты */
+.contact{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(32px,6vw,96px)}
+.contact h3{font-family:var(--display);font-weight:500;font-size:1.2rem;letter-spacing:-.01em}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 30px}
+.chip{display:inline-flex;align-items:center;padding:10px 16px;border:1px solid var(--line2);font-size:14.5px;line-height:1.4;transition:background .25s,color .25s,border-color .25s}
+.chip::before{content:"";width:0;height:9px;border:solid currentColor;border-width:0;transform:rotate(45deg) translate(-2px,-2px);transition:width .25s var(--ease),margin .25s var(--ease)}
+.chip:hover{border-color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip[aria-pressed="true"]::before{width:5px;border-width:0 1.5px 1.5px 0;margin:0 12px 0 2px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px 28px}
+.f{position:relative;padding-top:22px}
+.f.full{grid-column:1/-1}
+.f input,.f textarea{display:block;width:100%;font:inherit;color:var(--ink);background:none;border:0;border-bottom:1px solid var(--line2);border-radius:0;padding:10px 0 12px;resize:none;-webkit-appearance:none;appearance:none}
+.f input:focus,.f textarea:focus{outline:0}
+.f input:-webkit-autofill{-webkit-text-fill-color:var(--ink);box-shadow:0 0 0 100px #fff inset}
+.f label{position:absolute;left:0;top:32px;color:var(--mut);pointer-events:none;transform-origin:left top;transition:transform .3s var(--ease),color .3s}
+.f input:focus+label,.f input:not(:placeholder-shown)+label,.f input:-webkit-autofill+label,.f textarea:focus+label,.f textarea:not(:placeholder-shown)+label{transform:translateY(-27px) scale(.74);color:var(--ink)}
+.f::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--ink);transform:scaleX(0);transform-origin:left center;transition:transform .5s var(--ease)}
+.f:focus-within::after{transform:none}
+.f.bad::after{transform:none;background:var(--err)}
+.f.bad label{color:var(--err)}
+.hint{font-size:13.5px;color:var(--mut);margin-top:10px}
+.form-foot{display:flex;flex-wrap:wrap;align-items:center;gap:14px 16px;margin-top:34px}
+.form-foot small{color:var(--mut);font-size:13.5px;flex:1 1 240px;line-height:1.45}
+.msg{font-size:14.5px;margin-top:14px;min-height:1.5em;color:var(--acc)}
+.side>div+div{margin-top:46px}
+.addr{font-family:var(--display);font-weight:500;font-size:clamp(1.15rem,1.7vw,1.45rem);line-height:1.35;letter-spacing:-.01em;margin:14px 0 18px}
+.row-links{display:flex;flex-wrap:wrap;gap:6px 28px}
+.clock{display:flex;align-items:center;gap:10px;margin-top:22px}
+.clock i{width:6px;height:6px;border-radius:50%;background:var(--acc)}
+.clock b{font-weight:400;color:var(--ink);font-variant-numeric:tabular-nums}
+.req-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.req{list-style:none;margin:14px 0 0;padding:0;border-top:1px solid var(--line)}
+.req li{display:grid;grid-template-columns:104px minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--line)}
+.req b{font-weight:500;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.copy{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);padding:4px 0;border-bottom:1px solid transparent;transition:color .2s,border-color .2s,opacity .25s}
+.copy:hover{color:var(--ink);border-color:var(--ink)}
+.copy.done{color:var(--acc);border-color:var(--acc)}
+
+/* ───────── подвал ───────── */
+footer{margin-top:clamp(90px,12vw,170px);padding:0 0 36px}
+.f-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:28px;padding:clamp(40px,6vw,80px) 0 clamp(36px,5vw,64px)}
+.wordmark{font-family:var(--display);font-weight:600;font-size:clamp(2.7rem,9.4vw,8.6rem);line-height:.86;letter-spacing:-.045em;white-space:nowrap}
+.wordmark span{display:inline-block;color:var(--acc);transition:transform .6s var(--ease)}
+.f-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;padding:30px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.f-cols .mono{margin-bottom:14px}
+.f-cols a,.f-cols p:not(.mono){display:block;font-size:15px;color:var(--mut);line-height:1.75}
+.f-cols a{width:fit-content;transition:color .2s,transform .4s var(--ease)}
+.f-cols a:hover{color:var(--ink);transform:translateX(4px)}
+.foot{display:flex;flex-wrap:wrap;gap:10px 40px;justify-content:space-between;align-items:center;color:var(--mut);font-size:13.5px;padding-top:22px}
+
+.totop{position:fixed;right:22px;bottom:22px;z-index:40;width:46px;height:46px;display:grid;place-items:center;background:#fff;border:1px solid var(--line2);opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .3s,visibility .3s,transform .4s var(--ease),border-color .3s,background .3s,color .3s}
+.totop.show{opacity:1;visibility:visible;transform:none}
+.totop:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* наведение — только там, где есть мышь */
+@media (hover:hover) and (pointer:fine){
+  .card:hover{background:var(--soft)}
+  .card:hover::before,.card:hover::after{opacity:1;transform:none}
+  .plate,.card figure{cursor:crosshair}
+  .step:hover::after,.step.done::after{background:var(--acc);border-color:var(--acc)}
+  .pillars .row>div:nth-child(1):hover svg{transform:rotate(90deg)}
+  .pillars .row>div:nth-child(2):hover svg{transform:translateY(-4px)}
+  .pillars .row>div:nth-child(3):hover svg{transform:rotate(-24deg)}
+  .wordmark:hover span{transform:translateY(-.12em)}
+  .checks li:hover{padding-left:8px}
+  .req .copy{opacity:.7}
+  .req li:hover .copy,.req .copy:focus-visible,.req .copy.done{opacity:1}
+}
+
+/* ───────── адаптив ───────── */
+@media (max-width:1180px){
+  .nav-phone{display:none}
+}
+@media (max-width:1020px){
+  .nav .wrap{gap:28px}
+  .nav nav{gap:26px}
+  .hero-grid,.head,.trust,.contact{grid-template-columns:minmax(0,1fr)}
+  .hero-fig{max-width:660px;width:100%;margin-inline:auto}
+  .head>p,.head>.aside{justify-self:start}
+  .trust .intro{position:static}
+  .seal{display:none}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .statement .wrap>div{grid-template-columns:minmax(0,1fr);gap:22px}
+  .statement .eyebrow{margin-top:0}
+  .steps{grid-template-columns:1fr}
+  .steps-rule{display:none}
+  .step,.step+.step{display:grid;grid-template-columns:64px minmax(0,1fr);column-gap:12px;padding:22px 0;border-left:0;border-bottom:1px solid var(--line)}
+  .step:first-child{border-top:1px solid var(--ink)}
+  .step::before{grid-row:span 2;padding-top:5px}
+  .step::after{display:none}
+  .step h3{margin-top:0}
+}
+@media (max-width:900px){
+  .nav .wrap,.nav.stuck .wrap{height:64px;gap:14px}
+  .nav.stuck{margin-bottom:0}
+  .nav nav{position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;margin:0;background:#fff;border-bottom:1px solid var(--line);padding:4px var(--pad) 18px;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .25s,visibility .25s,transform .3s var(--ease)}
+  .menu-open .nav nav{opacity:1;visibility:visible;transform:none}
+  .menu-open .nav{background:#fff;border-color:var(--line)}
+  .nav nav a{padding:16px 0;font-size:18px;color:var(--ink);border-bottom:1px solid var(--line)}
+  .nav nav a::after{display:none}
+  .nav .btn-sm{margin-left:auto}
+  .burger{display:block}
+}
+@media (max-width:760px){
+  body{font-size:16px}
+  .mono{font-size:11px;letter-spacing:.11em}
+  .nav .btn-sm{display:none}
+  .burger{margin-left:auto}
+  .pillars .row{grid-template-columns:1fr}
+  .pillars .row>div,.pillars .row>div+div{padding:20px 0;border-left:0;border-bottom:1px solid var(--line)}
+  .legend{gap:10px 16px}
+  .legend li{font-size:13.5px;gap:10px}
+  .grid{grid-template-columns:1fr}
+  .card .body{padding:0 24px}
+  .card .art{height:70%}
+  .plate .ro span:nth-child(n+5){display:none}
+  .card .ro{left:24px;right:24px;bottom:3px}
+  .ro{font-size:10px}
+  .fields{grid-template-columns:1fr}
+  .checks li{grid-template-columns:22px minmax(0,1fr)}
+  .checks small{order:2}
+  .checks .src{grid-row:auto;grid-column:2;order:3;margin-top:6px}
+  .req li{grid-template-columns:84px minmax(0,1fr) auto}
+  .f-cols{grid-template-columns:1fr;gap:26px}
+  .plate figcaption span:last-child{display:none}
+  .totop{right:14px;bottom:14px;width:42px;height:42px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .tip{display:none}
+  .js .rv,.js .rule{opacity:1;transform:none;transition:none}
+  *,*::before,*::after{transition-duration:.01ms!important}
+}
+@media print{
+  .nav,.progress,.totop,.skip,.chips,.form-foot,.hint,.msg,.ask,.seal,.f-top .rv:last-child,.clock,.ro,.tip{display:none!important}
+  .js .rv,.js .rule{opacity:1!important;transform:none!important}
+  body{font-size:11pt}
+  section,.statement{padding-top:36px}
+  .card,.checks li,.step{break-inside:avoid}
+  footer{margin-top:40px}
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#top">Перейти к содержанию</a>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<div class="sr" id="live" aria-live="polite"></div>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="ГТЛ Система — на главную">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#16171a"/><path d="M18 18h28v8H26v12h12v-5h8v13H18z" fill="#fff"/></svg>
+      ГТЛ СИСТЕМА
+    </a>
+    <nav id="menu" aria-label="Основная навигация">
+      <a href="#services">Направления</a>
+      <a href="#process">Процесс</a>
+      <a href="#trust">Надёжность</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+    <a class="nav-phone" data-phone hidden></a>
+    <a class="btn btn-dark btn-sm" href="#contact">Обсудить проект <span class="ar" aria-hidden="true">→</span></a>
+    <button class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
+  </div>
+</header>
+
+<main id="top" tabindex="-1">
+
+<div class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="mono eyebrow rv">Поставка промышленных станков · Москва</div>
+        <h1 class="rv" style="--d:.06s">Станки для производства. <span>От&nbsp;подбора до&nbsp;запуска.</span></h1>
+        <p class="lead rv" style="--d:.12s"><b>ГТЛ Система оснащает производства.</b> Подбираем и&nbsp;поставляем промышленные станки, монтируем и&nbsp;запускаем их на&nbsp;площадке, обслуживаем и&nbsp;разрабатываем программное обеспечение.</p>
+        <div class="cta rv" style="--d:.18s">
+          <a class="btn btn-dark" href="#contact">Обсудить проект <span class="ar" aria-hidden="true">→</span></a>
+          <a class="link" href="#services">Направления работы <span class="ar" aria-hidden="true">→</span></a>
+        </div>
+        <div class="reg mono rv" style="--d:.24s">
+          <span>ИНН <b>9725194159</b></span>
+          <span>ОГРН <b>1257700441635</b></span>
+        </div>
+      </div>
+
+      <div class="hero-fig rv" style="--d:.15s">
+        <figure class="plate">
+          <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+          <div class="art" data-art="machine" role="img" aria-label="Обрабатывающий центр с ЧПУ — изометрический чертёж с позициями 1–4"><noscript><img src="assets/machine.svg" width="771" height="639" alt=""></noscript></div>
+          <figcaption class="mono"><span><b>Рис.&nbsp;1</b> — Обрабатывающий центр с&nbsp;ЧПУ</span><span>Изометрия</span></figcaption>
+        </figure>
+        <ol class="legend">
+          <li>Привод шпинделя</li>
+          <li>Рабочая зона</li>
+          <li>Стойка ЧПУ</li>
+          <li>Удаление стружки</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="pillars">
+      <div class="rule"></div>
+      <div class="row">
+        <div class="rv">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="7"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg>
+          <h2 class="pt">Подбор</h2><p>Оборудование под деталь, материал и&nbsp;программу выпуска.</p>
+        </div>
+        <div class="rv" style="--d:.08s">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 21 8v8l-9 5-9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8M7.5 5.5l9 5"/></svg>
+          <h2 class="pt">Поставка и&nbsp;запуск</h2><p>Логистика, монтаж и&nbsp;пусконаладка под&nbsp;одной ответственностью.</p>
+        </div>
+        <div class="rv" style="--d:.16s">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 6.5a4 4 0 0 0-5.3 5.3L3 18l3 3 6.2-6.2a4 4 0 0 0 5.3-5.3L15 12l-3-3z"/></svg>
+          <h2 class="pt">Сервис и&nbsp;софт</h2><p>Обслуживание, ремонт и&nbsp;программные инструменты для&nbsp;производства.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="statement">
+  <div class="wrap">
+    <div>
+      <div class="mono eyebrow rv">Подход</div>
+      <p class="rv" style="--d:.08s">Станок — это не&nbsp;покупка, а&nbsp;запущенный процесс. <span>Поэтому мы отвечаем за&nbsp;результат: оборудование, которое работает на&nbsp;вашей площадке.</span></p>
+    </div>
+  </div>
+</div>
+
+<section id="services">
+  <div class="wrap">
+    <div class="rule"></div>
+    <div class="head">
+      <div class="rv">
+        <div class="mono eyebrow"><b>01</b>Направления</div>
+        <h2>Полный контур оснащения производства</h2>
+      </div>
+      <div class="aside rv" style="--d:.08s">
+        <p>Берём задачу целиком или подключаемся на&nbsp;нужном этапе — от&nbsp;выбора станка до&nbsp;его обслуживания.</p>
+        <p class="mono tip" id="tip">Рисунки живые — водите курсором и щёлкайте</p>
+      </div>
+    </div>
+
+    <div class="grid" id="grid">
+      <article class="card rv">
+        <span class="figno mono"><b>Рис.&nbsp;2</b></span>
+        <figure><div class="art" data-art="delivery" role="img" aria-label="Станок в транспортной таре на стропах под тележкой крана"><noscript><img src="assets/delivery.svg" width="704" height="648" alt=""></noscript></div></figure>
+        <div class="body"><h3>Поставка станков</h3><p>Подбираем оборудование под задачу и&nbsp;поставляем его на&nbsp;площадку — от&nbsp;одного станка до&nbsp;оснащения участка.</p>
+          <button class="link ask" type="button" data-pick="Поставка станков" aria-label="Запросить: поставка станков">Запросить <span class="ar" aria-hidden="true">→</span></button></div>
+      </article>
+      <article class="card rv">
+        <span class="figno mono"><b>Рис.&nbsp;3</b></span>
+        <figure><div class="art" data-art="install" role="img" aria-label="Станок на фундаменте, выверка по осям и уровню"><noscript><img src="assets/install.svg" width="673" height="610" alt=""></noscript></div></figure>
+        <div class="body"><h3>Монтаж и&nbsp;пусконаладка</h3><p>Устанавливаем оборудование на&nbsp;фундамент, подключаем, выверяем геометрию и&nbsp;выводим на&nbsp;рабочий режим.</p>
+          <button class="link ask" type="button" data-pick="Монтаж и запуск" aria-label="Запросить: монтаж и пусконаладка">Запросить <span class="ar" aria-hidden="true">→</span></button></div>
+      </article>
+      <article class="card rv">
+        <span class="figno mono"><b>Рис.&nbsp;4</b></span>
+        <figure><div class="art" data-art="service" role="img" aria-label="Шпиндельный узел в разнесённом виде"><noscript><img src="assets/service.svg" width="279" height="616" alt=""></noscript></div></figure>
+        <div class="body"><h3>Ремонт и&nbsp;сервис</h3><p>Диагностируем, ремонтируем и&nbsp;восстанавливаем узлы станков, чтобы простой оборудования был коротким.</p>
+          <button class="link ask" type="button" data-pick="Ремонт и сервис" aria-label="Запросить: ремонт и сервис">Запросить <span class="ar" aria-hidden="true">→</span></button></div>
+      </article>
+      <article class="card rv">
+        <span class="figno mono"><b>Рис.&nbsp;5</b></span>
+        <figure><div class="art" data-art="layout" role="img" aria-label="Планировка производственного участка с потоком деталей"><noscript><img src="assets/layout.svg" width="836" height="566" alt=""></noscript></div></figure>
+        <div class="body"><h3>Инжиниринг и&nbsp;проектирование</h3><p>Проектируем участки и&nbsp;планировки, ведём проект и&nbsp;консультируем по&nbsp;техническим решениям.</p>
+          <button class="link ask" type="button" data-pick="Проектирование" aria-label="Запросить: инжиниринг и проектирование">Запросить <span class="ar" aria-hidden="true">→</span></button></div>
+      </article>
+      <article class="card rv">
+        <span class="figno mono"><b>Рис.&nbsp;6</b></span>
+        <figure><div class="art" data-art="software" role="img" aria-label="Данные со станков поступают в панель мониторинга"><noscript><img src="assets/software.svg" width="517" height="597" alt=""></noscript></div></figure>
+        <div class="body"><h3>Программное обеспечение</h3><p>Разрабатываем ПО для&nbsp;производства: учёт, мониторинг оборудования, интеграции. Поставляем компьютеры и&nbsp;периферию.</p>
+          <button class="link ask" type="button" data-pick="Разработка ПО" aria-label="Запросить: программное обеспечение">Запросить <span class="ar" aria-hidden="true">→</span></button></div>
+      </article>
+      <article class="card rv">
+        <span class="figno mono"><b>Рис.&nbsp;7</b></span>
+        <figure><div class="art" data-art="consulting" role="img" aria-label="Сравнение вариантов оснащения"><noscript><img src="assets/consulting.svg" width="538" height="400" alt=""></noscript></div></figure>
+        <div class="body"><h3>Консалтинг и&nbsp;анализ рынка</h3><p>Сравниваем варианты оснащения, считаем экономику решения и&nbsp;исследуем конъюнктуру рынка.</p>
+          <button class="link ask" type="button" data-pick="Консалтинг" aria-label="Запросить: консалтинг и анализ рынка">Запросить <span class="ar" aria-hidden="true">→</span></button></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="rule"></div>
+    <div class="head">
+      <div class="rv">
+        <div class="mono eyebrow"><b>02</b>Процесс</div>
+        <h2>От задачи до&nbsp;работающего участка</h2>
+      </div>
+      <p class="rv" style="--d:.08s">Пять шагов, которые можно пройти с&nbsp;нами целиком или выбрать только нужные.</p>
+    </div>
+    <div class="rule steps-rule"></div>
+    <div class="steps">
+      <div class="step rv"><h3>Разбор задачи</h3><p>Фиксируем деталь, материал, объёмы, сроки и&nbsp;ограничения площадки.</p></div>
+      <div class="step rv" style="--d:.07s"><h3>Подбор и&nbsp;обоснование</h3><p>Сравниваем варианты оборудования и&nbsp;считаем экономику решения.</p></div>
+      <div class="step rv" style="--d:.14s"><h3>Поставка</h3><p>Договор, логистика и&nbsp;документы — в&nbsp;одном окне.</p></div>
+      <div class="step rv" style="--d:.21s"><h3>Монтаж и&nbsp;запуск</h3><p>Устанавливаем, подключаем, выводим оборудование на&nbsp;рабочий режим.</p></div>
+      <div class="step rv" style="--d:.28s"><h3>Сервис</h3><p>Обслуживаем, ремонтируем и&nbsp;подключаем программные инструменты.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="trust">
+  <div class="wrap">
+    <div class="rule"></div>
+    <div class="trust">
+      <div class="intro rv">
+        <div class="mono eyebrow"><b>03</b>Надёжность</div>
+        <h2>Проверяемая компания</h2>
+        <p>Вместо громких цифр — факты из&nbsp;государственных реестров. Каждый пункт можно перепроверить самостоятельно по&nbsp;ИНН.</p>
+        <a class="link" href="https://checko.ru/company/gtl-sistema-1257700441635" target="_blank" rel="noopener">Карточка компании в&nbsp;реестре <span class="ar up" aria-hidden="true">↗</span></a>
+        <svg class="seal" viewBox="0 0 124 124" aria-hidden="true">
+          <defs><path id="sealp" d="M62 13a49 49 0 1 1 0 98a49 49 0 1 1 0-98"/></defs>
+          <circle cx="62" cy="62" r="60.5" fill="none" stroke="currentColor" stroke-width="1"/>
+          <circle cx="62" cy="62" r="37" fill="none" stroke="#cdcac3" stroke-width="1"/>
+          <text><textPath href="#sealp">ОТКРЫТЫЕ ДАННЫЕ · ПРОВЕРКА ПО ИНН · ЕГРЮЛ ·&#160;</textPath></text>
+          <path d="M49 63.5 58 72 76 52" fill="none" stroke="#a0622d" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="rule"></div>
+        <ul class="checks">
+          <li class="rv"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2.5 8.5 3.5 3.5 7.5-8"/></svg><b>Действующее юридическое лицо</b><span class="src mono">ЕГРЮЛ</span><small>Зарегистрировано 7&nbsp;октября 2025&nbsp;года, ОГРН&nbsp;1257700441635</small></li>
+          <li class="rv"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2.5 8.5 3.5 3.5 7.5-8"/></svg><b>В реестре малого и&nbsp;среднего бизнеса</b><span class="src mono">ФНС</span><small>Микропредприятие, в&nbsp;реестре МСП с&nbsp;10&nbsp;ноября 2025&nbsp;года</small></li>
+          <li class="rv"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2.5 8.5 3.5 3.5 7.5-8"/></svg><b>Нет налоговой задолженности</b><span class="src mono">ФНС</span><small>Сведения о&nbsp;задолженности отсутствуют, общая система налогообложения</small></li>
+          <li class="rv"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2.5 8.5 3.5 3.5 7.5-8"/></svg><b>Нет исполнительных производств</b><span class="src mono">ФССП</span><small>Открытых производств в&nbsp;отношении компании нет</small></li>
+          <li class="rv"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2.5 8.5 3.5 3.5 7.5-8"/></svg><b>Не в&nbsp;реестре недобросовестных поставщиков</b><span class="src mono">Казначейство</span><small>Компания в&nbsp;РНП не&nbsp;значится</small></li>
+          <li class="rv"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2.5 8.5 3.5 3.5 7.5-8"/></svg><b>Нет сообщений о&nbsp;банкротстве</b><span class="src mono">ЕФРСБ</span><small>Записей в&nbsp;реестре нет, в&nbsp;санкционные списки не&nbsp;входит</small></li>
+        </ul>
+        <p class="note">Сведения приведены по&nbsp;открытым данным на&nbsp;10&nbsp;ноября 2026&nbsp;года.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="rule"></div>
+    <div class="head">
+      <div class="rv">
+        <div class="mono eyebrow"><b>04</b>Контакты</div>
+        <h2>Расскажите о&nbsp;задаче</h2>
+      </div>
+      <p class="rv" style="--d:.08s">Отметьте, что нужно, и&nbsp;опишите задачу в&nbsp;двух словах. Этого достаточно, чтобы начать разговор.</p>
+    </div>
+
+    <div class="contact rv">
+      <form id="form" novalidate>
+        <h3 id="chips-h">Что вас интересует</h3>
+        <div class="chips" id="chips" role="group" aria-labelledby="chips-h">
+          <button type="button" class="chip" aria-pressed="false" data-v="Поставка станков">Поставка станков</button>
+          <button type="button" class="chip" aria-pressed="false" data-v="Монтаж и запуск">Монтаж и запуск</button>
+          <button type="button" class="chip" aria-pressed="false" data-v="Ремонт и сервис">Ремонт и сервис</button>
+          <button type="button" class="chip" aria-pressed="false" data-v="Проектирование">Проектирование</button>
+          <button type="button" class="chip" aria-pressed="false" data-v="Разработка ПО">Разработка ПО</button>
+          <button type="button" class="chip" aria-pressed="false" data-v="Консалтинг">Консалтинг</button>
+        </div>
+        <div class="fields">
+          <div class="f"><input id="f-name" name="name" autocomplete="name" autocapitalize="words" enterkeyhint="next" placeholder=" " required aria-required="true"><label for="f-name">Имя</label></div>
+          <div class="f"><input id="f-org" name="org" autocomplete="organization" enterkeyhint="next" placeholder=" "><label for="f-org">Компания</label></div>
+          <div class="f full"><input id="f-contact" name="contact" autocapitalize="off" enterkeyhint="next" placeholder=" " required aria-required="true"><label for="f-contact">Телефон или e-mail</label></div>
+          <div class="f full"><textarea id="f-text" name="text" rows="1" placeholder=" " aria-describedby="f-hint"></textarea><label for="f-text">Задача</label></div>
+        </div>
+        <p class="hint" id="f-hint">Например: нужен станок для обработки корпусных деталей, запуск до&nbsp;конца квартала.</p>
+        <div class="form-foot">
+          <button class="btn btn-dark" type="submit">Отправить заявку <span class="ar" aria-hidden="true">→</span></button>
+          <button class="btn btn-line" type="button" id="copy-req">Скопировать текст</button>
+          <small>Заявка откроется письмом в&nbsp;вашей почтовой программе — ничего не&nbsp;уходит без вашего подтверждения.</small>
+        </div>
+        <div class="msg" id="msg" role="status" aria-live="polite"></div>
+      </form>
+
+      <div class="side">
+        <div>
+          <div class="mono">Офис</div>
+          <p class="addr">115114, Москва, Дербеневская набережная, д.&nbsp;13/17, к.&nbsp;2, помещ.&nbsp;1/1</p>
+          <div class="row-links">
+            <a class="link" href="https://yandex.ru/maps/?text=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D0%B5%D0%B2%D1%81%D0%BA%D0%B0%D1%8F%20%D0%BD%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F%2C%2013%2F17%D0%BA2" target="_blank" rel="noopener">Показать на&nbsp;карте <span class="ar up" aria-hidden="true">↗</span></a>
+            <a class="link" data-phone hidden></a>
+            <a class="link" data-mail hidden></a>
+          </div>
+          <div class="clock mono"><i></i>Сейчас в&nbsp;Москве <b data-clock>—:—</b></div>
+        </div>
+        <div>
+          <div class="req-head">
+            <div class="mono">Реквизиты</div>
+            <button class="copy" type="button" id="copy-all">Скопировать все</button>
+          </div>
+          <ul class="req" id="req">
+            <li><span class="mono">Название</span><b>ООО «ГТЛ Система»</b><i></i></li>
+            <li><span class="mono">ИНН</span><b>9725194159</b><button class="copy" type="button" data-copy="9725194159" aria-label="Скопировать ИНН">копия</button></li>
+            <li><span class="mono">КПП</span><b>772501001</b><button class="copy" type="button" data-copy="772501001" aria-label="Скопировать КПП">копия</button></li>
+            <li><span class="mono">ОГРН</span><b>1257700441635</b><button class="copy" type="button" data-copy="1257700441635" aria-label="Скопировать ОГРН">копия</button></li>
+            <li><span class="mono">ОКПО</span><b>80793090</b><button class="copy" type="button" data-copy="80793090" aria-label="Скопировать ОКПО">копия</button></li>
+            <li><span class="mono">Директор</span><b>Лебедев Алексей Николаевич</b><i></i></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="rule"></div>
+    <div class="f-top">
+      <div class="wordmark rv" aria-hidden="true">ГТЛ СИСТЕМА<span>.</span></div>
+      <div class="rv" style="--d:.1s"><a class="btn btn-dark" href="#contact">Обсудить проект <span class="ar" aria-hidden="true">→</span></a></div>
+    </div>
+    <div class="f-cols">
+      <div>
+        <p class="mono">Разделы</p>
+        <a href="#services">Направления</a>
+        <a href="#process">Процесс</a>
+        <a href="#trust">Надёжность</a>
+        <a href="#contact">Контакты</a>
+      </div>
+      <div>
+        <p class="mono">Офис</p>
+        <p>115114, Москва,<br>Дербеневская набережная,<br>д.&nbsp;13/17, к.&nbsp;2, помещ.&nbsp;1/1</p>
+        <a data-phone hidden></a>
+        <a data-mail hidden></a>
+      </div>
+      <div>
+        <p class="mono">Компания</p>
+        <p>ООО «ГТЛ Система»<br>ИНН&nbsp;9725194159<br>ОГРН&nbsp;1257700441635</p>
+      </div>
+    </div>
+    <div class="foot">
+      <span>© <span id="year">2026</span> ООО «ГТЛ Система»</span>
+      <span class="mono">Москва · <span data-clock>—:—</span></span>
+    </div>
+  </div>
+</footer>
+
+<a class="totop" id="totop" href="#top" aria-label="Наверх">↑</a>
+
+<script>
+/* ───────── Настройки: впишите контакты, и они появятся в шапке, блоке «Офис» и подвале ───────── */
+const CONFIG = {
+  phone: '',   // например '+7 (495) 000-00-00'
+  email: ''    // например 'info@gtlsys.ru' — на этот адрес будет уходить заявка
+};
+
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const root = document.documentElement;
+  const plain = s => s.replace(/ /g, ' ').trim();
+
+  $('#year').textContent = new Date().getFullYear();
+  if (matchMedia('(hover: none)').matches) $('#tip').textContent = 'Рисунки живые — коснитесь любого';
+
+  /* контакты из настроек */
+  if (CONFIG.phone) $$('[data-phone]').forEach(a => { a.hidden = false; a.textContent = CONFIG.phone; a.href = 'tel:' + CONFIG.phone.replace(/[^\d+]/g, ''); });
+  if (CONFIG.email) $$('[data-mail]').forEach(a => { a.hidden = false; a.textContent = CONFIG.email; a.href = 'mailto:' + CONFIG.email; });
+
+  /* типограф: короткие слова не остаются в конце строки, тире не начинает строку (главный заголовок размечен вручную) */
+  const bind = s => s.replace(/(^|[\s «(])([А-Яа-яЁё]{1,3}) (?=\S)/g, '$1$2 ').replace(/ —/g, ' —');
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode: n => n.parentElement.closest('script,style,textarea,noscript,svg,h1,.ro') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+  });
+  for (let n; (n = walker.nextNode());) { const t = bind(bind(n.nodeValue)); if (t !== n.nodeValue) n.nodeValue = t; }
+
+  /* московское время */
+  const fmt = new Intl.DateTimeFormat('ru-RU', { timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit' });
+  const tick = () => $$('[data-clock]').forEach(el => el.textContent = fmt.format(new Date()));
+  tick(); setInterval(tick, 20000);
+
+  /* шапка, индикатор прокрутки, кнопка «наверх» */
+  const nav = $('#nav'), progress = $('#progress'), totop = $('#totop'), seal = $('.seal');
+  let lastY = scrollY, up = false;
+  const onScroll = () => {
+    const y = scrollY, max = root.scrollHeight - innerHeight;
+    if (Math.abs(y - lastY) > 4) { up = y < lastY; lastY = y; }
+    nav.classList.toggle('stuck', y > 8);
+    totop.classList.toggle('show', up && y > 700 && y < max - 140);   /* кнопка «наверх» появляется, когда листают назад */
+    progress.style.setProperty('--p', max > 0 ? Math.min(1, y / max) : 0);
+    seal.style.setProperty('--r', (y * .045).toFixed(1) + 'deg');          /* надпись на печати поворачивается вместе с прокруткой */
+  };
+  addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll();
+
+  const burger = $('#burger');
+  const setMenu = v => { root.classList.toggle('menu-open', v); burger.setAttribute('aria-expanded', v); };
+  burger.addEventListener('click', () => setMenu(!root.classList.contains('menu-open')));
+  $$('#menu a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+  addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+  matchMedia('(min-width:901px)').addEventListener('change', () => setMenu(false));
+
+  const hasIO = 'IntersectionObserver' in window;
+
+  /* активный пункт меню */
+  const links = new Map($$('#menu a').map(a => [a.getAttribute('href').slice(1), a]));
+  if (hasIO) {
+    const seen = new Map([...links.keys()].map(id => [id, false]));
+    const spy = new IntersectionObserver(es => {
+      es.forEach(e => seen.set(e.target.id, e.isIntersecting));
+      let cur = null; seen.forEach((v, id) => { if (v) cur = id; });
+      links.forEach((a, id) => { a.classList.toggle('on', id === cur); id === cur ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current'); });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    links.forEach((a, id) => { const s = document.getElementById(id); if (s) spy.observe(s); });
+  }
+
+  /* появление блоков */
+  $$('#grid .card').forEach((c, i) => c.style.setProperty('--d', (i % 3) * .09 + 's'));
+  $$('.checks li').forEach((c, i) => c.style.setProperty('--d', i * .05 + 's'));
+  if (hasIO) {
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .08, rootMargin: '0px 0px -4% 0px' });
+    $$('.rv, .rule').forEach(el => io.observe(el));
+  } else {
+    $$('.rv, .rule').forEach(el => el.classList.add('in'));
+  }
+
+  /* процесс: линия прогресса тянется до шага под курсором */
+  const steps = $$('.step'), srule = $('.steps-rule');
+  steps.forEach((el, i) => el.addEventListener('pointerenter', e => {
+    if (e.pointerType === 'touch') return;
+    srule.style.setProperty('--p', (i + 1) / steps.length);
+    steps.forEach((x, j) => x.classList.toggle('done', j <= i));
+  }));
+  $('.steps').addEventListener('pointerleave', () => { srule.style.setProperty('--p', 0); steps.forEach(x => x.classList.toggle('done', false)); });
+
+  /* сетка на чертеже высвечивается вокруг курсора */
+  const plate = $('.plate');
+  plate.addEventListener('pointermove', e => {
+    if (e.pointerType === 'touch') return;
+    const r = plate.getBoundingClientRect();
+    plate.style.setProperty('--mx', (50 + ((e.clientX - r.left) / r.width - .5) * 64).toFixed(1) + '%');
+    plate.style.setProperty('--my', (46 + ((e.clientY - r.top) / r.height - .5) * 64).toFixed(1) + '%');
+  });
+  plate.addEventListener('pointerleave', () => { plate.style.setProperty('--mx', '50%'); plate.style.setProperty('--my', '46%'); });
+
+  /* надпись на печати замыкается в ровное кольцо */
+  const tp = $('.seal textPath');
+  const fitSeal = () => {
+    if (!tp || !tp.getClientRects().length) return;
+    const t = tp.parentNode; t.style.letterSpacing = '0px';
+    const len = tp.getComputedTextLength(), total = $('#sealp').getTotalLength();
+    t.style.letterSpacing = len ? Math.max(0, (total - len) / tp.textContent.length) + 'px' : '';
+  };
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(fitSeal);
+  matchMedia('(min-width:1021px)').addEventListener('change', fitSeal);
+
+  /* копирование */
+  const live = $('#live');
+  const copy = async (text, btn, done = 'готово') => {
+    try { await navigator.clipboard.writeText(text); }
+    catch (e) { const t = document.createElement('textarea'); t.value = text; document.body.append(t); t.select(); document.execCommand('copy'); t.remove(); }
+    live.textContent = ''; setTimeout(() => live.textContent = 'Скопировано в буфер обмена', 30);
+    if (btn && !btn.classList.contains('done')) { const old = btn.textContent; btn.textContent = done; btn.classList.add('done'); setTimeout(() => { btn.textContent = old; btn.classList.remove('done'); }, 1400); }
+  };
+  $$('[data-copy]').forEach(b => b.addEventListener('click', () => copy(b.dataset.copy, b)));
+  $('#copy-all').addEventListener('click', e => copy(
+    $$('#req li').map(li => plain(li.children[0].textContent) + ': ' + plain(li.children[1].textContent)).join('\n') +
+    '\nЮридический адрес: 115114, г. Москва, вн. тер. г. муниципальный округ Даниловский, Дербеневская набережная, д. 13/17, к. 2, помещ. 1/1', e.currentTarget, 'скопировано'));
+
+  /* заявка */
+  const chips = $$('#chips .chip');
+  chips.forEach(c => c.addEventListener('click', () => c.setAttribute('aria-pressed', c.getAttribute('aria-pressed') !== 'true')));
+  const form = $('#form'), msg = $('#msg');
+
+  /* «Запросить» в карточке отмечает направление в форме */
+  $$('.ask').forEach(b => b.addEventListener('click', () => {
+    const chip = chips.find(c => c.dataset.v === b.dataset.pick);
+    if (chip) chip.setAttribute('aria-pressed', 'true');
+    $('#contact').scrollIntoView();
+    setTimeout(() => form.elements.name.focus({ preventScroll: true }), 700);
+  }));
+
+  /* поле задачи растёт по тексту */
+  const ta = form.elements.text;
+  ta.addEventListener('input', () => { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; });
+
+  const build = () => {
+    const picks = chips.filter(c => c.getAttribute('aria-pressed') === 'true').map(c => c.dataset.v);
+    const v = n => form.elements[n].value.trim();
+    const out = ['Заявка с сайта ГТЛ Система', '', 'Имя: ' + v('name')];
+    if (v('org')) out.push('Компания: ' + v('org'));
+    out.push('Контакт: ' + v('contact'));
+    if (picks.length) out.push('Интересует: ' + picks.join(', '));
+    if (v('text')) out.push('', 'Задача:', v('text'));
+    return out.join('\n');
+  };
+  const valid = () => {
+    let first = null;
+    ['name', 'contact'].forEach(n => {
+      const el = form.elements[n], bad = !el.value.trim();
+      el.parentElement.classList.toggle('bad', bad);
+      bad ? el.setAttribute('aria-invalid', 'true') : el.removeAttribute('aria-invalid');
+      if (bad && !first) first = el;
+    });
+    if (first) { msg.textContent = 'Укажите имя и способ связи — без них мы не сможем ответить.'; first.focus(); }
+    return !first;
+  };
+  form.addEventListener('input', e => { e.target.parentElement.classList.remove('bad'); e.target.removeAttribute('aria-invalid'); msg.textContent = ''; });
+  form.addEventListener('submit', e => {
+    e.preventDefault(); if (!valid()) return;
+    location.href = 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent('Заявка с сайта — ' + form.elements.name.value.trim()) + '&body=' + encodeURIComponent(build());
+    msg.textContent = 'Открываем почтовую программу. Если письмо не появилось — скопируйте текст заявки кнопкой рядом.';
+  });
+  $('#copy-req').addEventListener('click', e => { if (valid()) { copy(build(), e.currentTarget, 'Скопировано'); msg.textContent = 'Текст заявки в буфере обмена.'; } });
+})();
+</script>
+</body>
+</html>
